@@ -20,6 +20,101 @@ use DB;
 
 class BillingController extends Controller
 {
+
+    public function customer_list()
+    {
+        $role = Auth::user()->role;  
+        $city_list = \DB::table('cities')->where('status', '=', '1')->get();
+        $customer_list = DB::select(" select cs.id, cs.name as cust_name,cs.company_name as company,
+                                        cs.phone_no as ph_num, ct.name as city_name, cs.address as address  from customers cs  
+                                        inner join cities ct on cs.city_id = ct.id
+                                        where cs.status = '1'
+                                        order by cs.name "); 
+       
+        $notification = array(
+            'message' => 'Add Customer Successfully',
+            'alert-type' => 'success'
+        );
+           
+        if($role == 'admin'){
+            return view('admin.customer.add_customer')
+                   ->with('customer_list', $customer_list)
+                   ->with('city_list', $city_list); 
+        }elseif($role == 'clerk1'){
+           return redirect('clerk1/city')->with($notification);
+        }
+        else{
+            return redirect()->back();
+        }
+    }
+    public function delete_customer(Request $request,$id){
+        $role = Auth::user()->role; 
+        $del_customer = Customer::find($id);
+        $del_customer->status = '0';
+        $del_customer->save();
+        
+        $notification = array(
+            'message' => 'Delete Successfully',
+            'alert-type' => 'success'
+        );
+       
+        if($role == 'admin'){
+              return redirect("admin/customer_list")->with($notification);
+        }elseif($role == 'clerk1'){
+            return redirect("clerk1/customer_list")->with($notification);
+        }
+        else{
+            return redirect()->back();
+        }
+    }
+
+    public function update_customer($id)
+    {   
+        $role = Auth::user()->role; 
+        $update_customer_detail = Customer::find($id);
+        $city = DB::select(" select id,name  from cities  
+                                  where status = '1'    "); 
+        if($role == 'admin'){
+              return view('admin.customer.update_customer')
+             ->with('update_customer_detail', $update_customer_detail)
+             ->with('city_list', $city);
+        }elseif($role == 'clerk1'){
+            return view('clerk1.city.update_city')
+        ->with('update_customer_detail', $update_customer_detail);
+        }
+        else{
+            return redirect()->back();
+        }
+       
+    }
+
+    public function edit_customer(Request $request, $id){
+        $role = Auth::user()->role; 
+        $update_customer = DB::table('customers')->where('id', $id)
+                            ->update(['name'=> $request->input('name'),
+                            'company_name'=> $request->input('company_name'),
+                            'phone_no'=> $request->input('phone_no'),
+                            'city_id'=> $request->input('city_id'),
+                            'address'=> $request->input('address'),
+                                   ]);
+        
+        
+        $notification = array(
+                                    'message' => 'Update Successfully',
+                                    'alert-type' => 'success'
+                                );
+        if($role == 'admin'){
+            return redirect("admin/customer_list")->with($notification);
+        }elseif($role == 'clerk1'){
+            return redirect("admin/customer_list");
+        }
+        else{
+            return redirect()->back();
+        }
+        
+    }
+
+
     public function city()
     {
         $role = Auth::user()->role;
@@ -39,6 +134,7 @@ class BillingController extends Controller
         
     }
 
+    
     public function add_city(Request $request)
     {
         $role = Auth::user()->role;  
@@ -129,7 +225,11 @@ class BillingController extends Controller
         $product_list = \DB::table('products')
                         ->where('products.status', '=', '1')
                         ->get();  
-        $customer_list = \DB::table('customers')->where('status', '=', '1')->get();
+        $customer_list = \DB::table('customers')
+                        ->leftjoin('cities', 'customers.city_id', '=', 'cities.id') 
+                        ->Select('customers.id','customers.name', 'customers.company_name', 'cities.name')
+                        ->where('customers.status','=', '1')
+                        ->OrderBy('customers.name', 'ASC')->get();
         $city_list = \DB::table('cities')->where('status', '=', '1')->get();
         if($role == 'admin'){
             return view('admin.billing.invoice')->with($data)
@@ -156,6 +256,7 @@ class BillingController extends Controller
             'name' => $request->input('name'),
             'phone_no' => $request->input('phone_number'),
             'alt_ph_no' => $request->input('alt_ph_no'),
+            'company_name' => $request->input('company_name'),
             'address' => $request->input('address'),
             'city_id' => $request->input('city_id'),
             'status' => '1',

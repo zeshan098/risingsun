@@ -37,22 +37,23 @@
                                     
                         </div> 
                     </div>
-                    <div class="col-md-11">
+                    <div class="col-md-11" style="display:none">
                         <div class="form-group">
-                            <label for="first_name">Select Category</label>
-                            <select name="category_id" id="category_id" class="form-control">
-                            <option value="">Select Category</option>
-                                @foreach($category as $category)
-                                <option value="{{$category->id}}">{{$category->name}}</option>
-                                @endforeach
-                            </select>
+                            <!--<label for="first_name">Select Category</label>-->
+                            <!--<select name="category_id" id="category_id" class="form-control">-->
+                            <!--<option value="">Select Category</option>-->
+                            <!--    @foreach($category as $category)-->
+                            <!--    <option value="{{$category->id}}">{{$category->name}}</option>-->
+                            <!--    @endforeach-->
+                            <!--</select>-->
+                        <input type="text" class="form-control" name="category_id" value="1">
                         </div>
                     </div>
-                    <div class="col-md-1"> 
-                           <a data-toggle="modal" data-target="#contact-modal-1" style="top: 34px;position: relative;">
-                                <span class="glyphicon glyphicon-plus-sign"></span>
-                            </a>
-                    </div>
+                    <!--<div class="col-md-1"> -->
+                    <!--       <a data-toggle="modal" data-target="#contact-modal-1" style="top: 34px;position: relative;">-->
+                    <!--            <span class="glyphicon glyphicon-plus-sign"></span>-->
+                    <!--        </a>-->
+                    <!--</div>-->
                     <div class="col-md-11">
                         <div class="form-group">
                             <label for="first_name">Select Brand</label>

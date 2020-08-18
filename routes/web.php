@@ -118,9 +118,13 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth',  'middleware' => 'ro
    Route::get('invoice_list', 'BillingController@invoice_list')->name('invoice_list');
    Route::get('view_invoice/{id}', 'BillingController@view_invoice')->name('view_invoice');
    Route::get('delete_invoice/{id}', 'BillingController@delete_invoice')->name('delete_invoice');
-   //Add Customer
    
+   //Add Customer
+   Route::get('customer_list', 'BillingController@customer_list')->name('customer_list');
    Route::Post('add_customer', 'BillingController@add_customer')->name('add_customer');
+   Route::get('delete_customer/{id}', 'BillingController@delete_customer')->name('delete_customer');
+   Route::get('update_customer/{id}', 'BillingController@update_customer')->name('update_customer');
+   Route::post('edit_customer/{id}', 'BillingController@edit_customer')->name('edit_customer');
    
    // Finance
    Route::get('get-payment-receipt', 'FinanceController@get_payment_receipt')->name('get-payment-receipt');
@@ -128,10 +132,20 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth',  'middleware' => 'ro
    Route::get('statement', 'FinanceController@get_statement')->name('statement');
    Route::post('statement', 'FinanceController@get_statement')->name('statement');
    Route::post('return_product', 'FinanceController@return_product')->name('return_product');
-
+   
+   //payment recipt view and delete
+   Route::get('show_receipt_list', 'FinanceController@show_receipt_list')->name('show_receipt_list');
+   Route::get('show_list/{id}', 'FinanceController@show_list')->name('show_list');
+  
+   //delete record
+   Route::get('delete_payment_record/{id}', 'FinanceController@delete_payment_record')->name('delete_payment_record');
    //Add Balance 
    Route::get('get-payment-balance', 'FinanceController@get_payment_balance')->name('get-payment-balance');
    Route::post('post-payment-balance', 'FinanceController@post_payment_balance')->name('post-payment-balance');
+
+   //Ledger Report
+   Route::get('ledger_report', 'FinanceController@get_ledger')->name('ledger_report');
+   Route::post('ledger_report', 'FinanceController@get_ledger')->name('ledger_report');
 });
 
 

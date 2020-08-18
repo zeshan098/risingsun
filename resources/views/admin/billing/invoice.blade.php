@@ -36,7 +36,7 @@
                     <td><select name="customer_id" id="customer_name" class="form-control select2">
                             <option value="" selected>Select Customer</option>
                             @foreach($customer_list as $customer_list)
-                            <option value="{{$customer_list->id}}">{{$customer_list->name}}</option>
+                            <option value="{{$customer_list->id}}">{{$customer_list->company_name}} ({{$customer_list->name}})</option>
                             @endforeach
                         </select></td>
                 </tr>
@@ -130,11 +130,15 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input type="text" id="name" name="name" class="form-control">
+                        <input type="text" id="name" name="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Company Name</label>
+                        <input type="text" id="company_name" name="company_name" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="name">Phone Number</label>
-                        <input type="text" id="phone_number" name="phone_number" class="form-control">
+                        <input type="text" id="phone_number" name="phone_number" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="name">Alt Phone Number</label>
@@ -142,7 +146,7 @@
                     </div>
                     <div class="form-group">
                         <label for="name">City</label>
-                        <select name="city_id" class="form-control">
+                        <select name="city_id" class="form-control" required>
                             <option value="" selected>Select City</option>
                             @foreach($city_list as $city_list)
                             <option value="{{$city_list->id}}">{{$city_list->name}}</option>
@@ -413,7 +417,7 @@
         });
         $("#total-invoice").text(sum.toFixed(2));
         $("#total_discounted_amount").text(sum.toFixed(2));
-        $("#amount_paid").val(sum.toFixed(2));
+        $("#amount_paid").val(0);
     }
 
 

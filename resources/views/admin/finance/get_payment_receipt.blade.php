@@ -20,6 +20,7 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">Add Payment Receipt</h3>
+                        <input type="button" class="btn btn-primary" onclick="location.href='show_receipt_list';" value="Delete Receipt" />
                     </div>
                     <form method="post" action="{{ route('post-payment-receipt') }}" enctype="multipart/form-data">
                         <input name="_token" type="hidden" value="{{ csrf_token() }}" />
@@ -31,7 +32,7 @@
                                         <select name="company_name" id="customer_name" class="form-control select2">
                                             <option value="" selected>Select Customer</option>
                                             @foreach($customer_list as $customer_list)
-                                            <option value="{{$customer_list->company_name}}">{{$customer_list->company_name}}</option>
+                                            <option value="{{$customer_list->company_name}}">{{$customer_list->company_name}} ({{$customer_list->name}})</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -42,7 +43,7 @@
                                 <div class="box-body">
                                     <div class="form-group">
                                         <label for="company_name">Amount</label>
-                                        <input type="text" name="amount" id="amount" value="" class="form-control" />
+                                        <input type="text" name="amount" id="amount" value="" class="form-control" required/>
                                     </div>
 
                                 </div>
@@ -64,6 +65,7 @@
                                 <th>Company</th>
                                 <th>Amount</th>
                                 <th>Date</th>
+                                <!-- <th>Action</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -74,6 +76,7 @@
                                 <td>{{ $PaymentReceipt->company_name }}</td>
                                 <td>{{ $PaymentReceipt->amount }}</td>
                                 <td>{{ $PaymentReceipt->created_at }}</td>
+                                <!-- <td><a href="{{route('delete_payment_record', $PaymentReceipt->id)}}"><i class="fa fa-trash fa-2" aria-hidden="true"></i></a></td> -->
                             </tr>
                             @endforeach
                             @endif

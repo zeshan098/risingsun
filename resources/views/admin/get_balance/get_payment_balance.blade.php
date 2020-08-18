@@ -31,7 +31,7 @@
                                         <select name="company_name" id="customer_name" class="form-control select2">
                                             <option value="" selected>Select Customer</option>
                                             @foreach($customer_list as $customer_list)
-                                            <option value="{{$customer_list->company_name}}">{{$customer_list->company_name}}</option>
+                                            <option value="{{$customer_list->company_name}}">{{$customer_list->company_name}} ({{$customer_list->name}})</option>
                                             @endforeach
                                         </select>
                                         <a data-toggle="modal" data-target="#contact-modal" style="top: 4px;position: relative;">
@@ -101,15 +101,15 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input type="text" id="name" name="name" class="form-control">
+                        <input type="text" id="name" name="name" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="name">Company Name</label>
-                        <input type="text" id="company_name" name="company_name" class="form-control">
+                        <input type="text" id="company_name" name="company_name" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="name">Phone Number</label>
-                        <input type="text" id="phone_number" name="phone_number" class="form-control">
+                        <input type="text" id="phone_number" name="phone_number" class="form-control" required>
                     </div>
                     <div class="form-group">
                         <label for="name">Alt Phone Number</label>
@@ -117,7 +117,7 @@
                     </div>
                     <div class="form-group">
                         <label for="name">City</label>
-                        <select name="city_id" class="form-control">
+                        <select name="city_id" class="form-control" required>
                             <option value="" selected>Select City</option>
                             @foreach($city_list as $city_list)
                             <option value="{{$city_list->id}}">{{$city_list->name}}</option>
@@ -192,7 +192,7 @@
             success: function(result) {
                 if (result) {
                     //  $('#brand_name').text(result);
-                    $('#customer_name').append($('<option />').attr("value", result[2]).text(result[0]).prop('selected', "selected"));
+                    $('#customer_name').append($('<option />').attr("value", result[2]).text(result[2]).prop('selected', "selected"));
                     value = $('#customer_name').val();
                     $('#customer_name').val(value);
                 }

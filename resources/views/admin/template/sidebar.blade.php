@@ -65,6 +65,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ $action_name == "city" ? 'active' : '' }}"><a href="{{ url('admin/city') }}">Add Cities</a></li> 
+                    <li class="{{ $action_name == "customer_list" ? 'active' : '' }}"><a href="{{ url('admin/customer_list') }}">Add Customer</a></li>
                     <li class="{{ $action_name == "invoice" ? 'active' : '' }}"><a href="{{ url('admin/invoice') }}">Create Invoice</a></li> 
                     <li class="{{ $action_name == "invoice_list" ? 'active' : '' }}"><a href="{{ url('admin/invoice_list') }}">Invoice List</a></li> 
                 
@@ -106,8 +107,9 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ $action_name == "get_statement" ? 'active' : '' }}"><a href="{{ url('admin/statement') }}">Statement</a></li>
-                    <li class="{{ $action_name == "get-payment-receipt" ? 'active' : '' }}"><a href="{{ url('admin/get-payment-receipt') }}">Payment Receipt</a></li>
+                    <li class="{{ $action_name == "get-payment-receipt" ? 'active' : '' }}"><a href="{{ url('admin/get-payment-receipt') }}">Payment Receipt</a></li> 
                     <li class="{{ $action_name == "get-payment-balance" ? 'active' : '' }}"><a href="{{ url('admin/get-payment-balance') }}">Add Old balance</a></li>
+                    <li class="{{ $action_name == "ledger_report" ? 'active' : '' }}"><a href="{{ url('admin/ledger_report') }}">Ledger</a></li>
                 </ul>
             </li>
              

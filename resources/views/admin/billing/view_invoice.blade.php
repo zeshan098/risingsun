@@ -13,7 +13,8 @@
 //dd($controller_name.' --- '.$action_name);
 ?>
 <!-- DataTables -->
-<link rel="stylesheet" href="{{ asset("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css") }}">
+<link rel="stylesheet" href="{{ asset("bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css") }}">  
+<link rel="stylesheet" href="{{ asset("bower_components/invoice/invoice.css") }}">
 <!-- Main content -->
 <section class="content">
   <div class="row">
@@ -112,12 +113,120 @@
       </div>
     </div>
     <!-- /.col -->
+    <div class="" style="text-align: right;"> 
+            <button id="btn1" type="button" data-toggle="modal" data-target="#myModal" value="{{$total_invoice->id}}" class="btn btn-primary">Print Invoice</button>
+        </div>
   </div>
   <!-- /.row -->
 
 
 
 </section>
+
+<!--invoice print model -->
+<!-- Modal for Edit button -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Invoice<span class="qr_winner_name_show" style="color: #32c5d2;"></span></h4>
+            </div>
+            <div id="invoice">
+
+                <div class="toolbar hidden-print">
+                    <div class="text-right">
+                        <button id="btnPrint" class="btn btn-info">Print</button>
+                        <!-- <input type="button" class="btn btn-info" onclick="PrintElem('invoice')" value="print" /> -->
+                        <!-- <button id="printInvoice" class="btn btn-info"><i class="fa fa-print"></i> Print</button>  -->
+                    </div>
+                    <hr>
+                </div>
+                <div class="invoice overflow-auto" id="printThis">
+                    <div style="min-width: 600px">
+                        <header>
+                            <div class="row">
+
+                                <div class="col company-details">
+                                    <h2 class="name">
+                                        <a target="_blank" href="#">
+                                            Test Center
+                                        </a>
+                                    </h2>
+                                    <div>455 Foggy Heights, AZ 85004, US</div>
+                                    <div>(123) 456-789</div>
+                                    <div>company@example.com</div>
+                                </div>
+                            </div>
+                        </header>
+                        <main>
+                            <div class="row contacts">
+                                <div class="col-md-5 invoice-to">
+                                    <div class="text-gray-light">Customer Name: <span class="to"> </span></div>
+                                    <div class="text-gray-light">Phone Number: <span class="phone_no"></span></div>
+                                    <div class="text-gray-light">Address:<span class="address"></span></div>
+                                </div>
+
+                                <div class="col-md-6  invoice-details">
+                                    <div class="text-gray-light" style="margin-left: 325px;">Invoice#: <span class="invoice-id"> </span></div>
+                                    <div class="text-gray-light" style="margin-left: 325px;">Date:<span class="date"></span> </div>
+                                </div>
+                            </div>
+
+                            <table border="0" cellspacing="0" cellpadding="0" id="sampleTbl">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th class="text-left">Item Code</th>
+                                        <th class="text-left">Product Name</th>
+                                        <th class="text-right">QTY</th>
+                                        <th class="text-right">Price</th>
+                                        <th class="text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3"></td>
+                                        <td colspan="2">SUBTOTAL</td>
+                                        <td class="sub_total"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"></td>
+                                        <td colspan="2">DISCOUNT</td>
+                                        <td class="discount"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"></td>
+                                        <td colspan="2">GRAND TOTAL</td>
+                                        <td class="grand_amount"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <div class="thanks">Thank you!</div>
+                            <!-- <div class="notices">
+                    <div>NOTICE:</div>
+                    <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+                </div> -->
+                        </main>
+                        <footer>
+                            Invoice was created on a computer and is valid without the signature and seal.
+                        </footer>
+                    </div>
+                    <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
+                    <div></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 
 <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -180,6 +289,7 @@
 <!-- page script -->
 <script src="{{ asset("bower_components/datepicker/bootstrap-datepicker.min.js") }}"></script>
 <script src="{{ asset("bower_components/datepicker/daterangepicker.js") }}"></script>
+<script src="{{ asset("bower_components/moment/moment.js") }}"></script>
 <script>
   $(function() {
     $('#users_list').DataTable({
@@ -217,5 +327,93 @@
   });
 </script>
 
+<script>
+    $("#btn1").on("click", function(e) {
+        var id = $(this).val();
+
+        console.log(id);
+
+        $.ajax({
+            url: "{{ url('admin/get_invoice') }}",
+            data: {
+                id: id
+            },
+            type: 'get',
+            dataType: 'JSON',
+            success: function(response) {
+                var len = response.length;
+                for (var i = 0; i < len; i++) {
+                    var second_date = moment(response[i].date).format('DD-MM-YYYY');
+                    $(".to").text(response[i].name);
+                    $(".phone_no").text(response[i].phone_no);
+                    $(".address").text(response[i].address);
+                    $(".invoice-id").text(response[i].bill_number);
+                    $(".date").text(second_date);
+                    $(".sub_total").text(response[i].total_amount + '/PKR');
+                    $(".discount").text(response[i].total_discount + '/PKR');
+                    $(".grand_amount").text(response[i].discounted_amount + '/PKR');
+                }
+            }
+        });
+
+    });
+</script>
+<!-- Product Detail -->
+<script>
+    $("#btn1").on("click", function(e) {
+        var id = $(this).val();
+
+        console.log(id);
+
+        $.ajax({
+            url: "{{ url('admin/get_product_invoice') }}",
+            data: {
+                id: id
+            },
+            type: 'get',
+            dataType: 'JSON',
+            success: function(response) {
+                var trHTML = '';
+                $.each(response, function(i, item) {
+                    var sum = i + 1;
+                    trHTML += '<tr><td class="no">' + sum + '</td><td class="item-code">' + item.code + '</td><td class="product-name">' + item.product_name + '</td><td class="qty">' + item.qty + '</td><td class="total">' + item.selling_price + '</td><td class="total_rate">' + item.total_value + '</td></tr>';
+                });
+                $('#sampleTbl').append(trHTML);
+            }
+        });
+
+    });
+</script>
+
+<script>
+    document.getElementById("btnPrint").onclick = function() {
+        printElement(document.getElementById("printThis"));
+        window.print();
+    }
+
+    function printElement(elem, append, delimiter) {
+        var domClone = elem.cloneNode(true);
+
+        var $printSection = document.getElementById("printThis");
+
+        if (!$printSection) {
+            var $printSection = document.createElement("div");
+            $printSection.id = "printThis";
+            document.body.appendChild($printSection);
+        }
+
+        if (append !== true) {
+            $printSection.innerHTML = "";
+        } else if (append === true) {
+            if (typeof(delimiter) === "string") {
+                $printSection.innerHTML += delimiter;
+            } else if (typeof(delimiter) === "object") {
+                $printSection.appendChlid(delimiter);
+            }
+        }
+
+        $printSection.appendChild(domClone);
+    }
+</script>
 
 @endsection

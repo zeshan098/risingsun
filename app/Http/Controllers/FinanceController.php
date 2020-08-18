@@ -26,7 +26,11 @@ class FinanceController extends Controller
 {
     public function get_statement(Request $request)
     {
-        $customer_list = Customer::where('status', '=', '1')->get();
+        $customer_list = \DB::table('customers')
+                        ->leftjoin('cities', 'customers.city_id', '=', 'cities.id') 
+                        ->Select('customers.name', 'customers.company_name', 'cities.name')
+                        ->where('customers.status','=', '1')
+                        ->OrderBy('customers.name', 'ASC')->get();
         $StatementRecords = null;
         $company_name = "";
         if ($request->method() == "POST") {
@@ -40,10 +44,14 @@ class FinanceController extends Controller
 
     public function get_payment_receipt(Request $request)
     {
-        $customer_list = Customer::where('status', '=', '1')->get();
+        $customer_list = \DB::table('customers')
+                        ->leftjoin('cities', 'customers.city_id', '=', 'cities.id') 
+                        ->Select('customers.name', 'customers.company_name', 'cities.name')
+                        ->where('customers.status','=', '1')
+                        ->OrderBy('customers.name', 'ASC')->get();
         // $StatementRecords = null;
         // $company_name = "";
-        $PaymentReceipts = PaymentReceipt::all();
+        $PaymentReceipts = PaymentReceipt::where('status', '=', '1')->get();
         // if ($request->method() == "POST") {
 
         // }
@@ -52,7 +60,11 @@ class FinanceController extends Controller
     }
     public function post_payment_receipt(Request $request)
     {
-        $customer_list = Customer::where('status', '=', '1')->get();
+        $customer_list = \DB::table('customers')
+                        ->leftjoin('cities', 'customers.city_id', '=', 'cities.id') 
+                        ->Select('customers.name', 'customers.company_name', 'cities.name')
+                        ->where('customers.status','=', '1')
+                        ->OrderBy('customers.name', 'ASC')->get();
         // $StatementRecords = null;
         // $company_name = "";
         $PaymentReceipts = PaymentReceipt::all();
@@ -60,6 +72,7 @@ class FinanceController extends Controller
         $company_name = $request->input('company_name');
         $payment_receipt = PaymentReceipt::create([
             'company_name' => $company_name,
+            'status' => '1',
             'amount' => $request->input('amount')
         ]);
         $payment_receipt_number = "PR-" . $payment_receipt->id;
@@ -86,7 +99,11 @@ class FinanceController extends Controller
 
     public function get_payment_balance(Request $request)
     {
-        $customer_list = Customer::where('status', '=', '1')->get(); 
+        $customer_list = \DB::table('customers')
+                        ->leftjoin('cities', 'customers.city_id', '=', 'cities.id') 
+                        ->Select('customers.name', 'customers.company_name', 'cities.name')
+                        ->where('customers.status','=', '1')
+                        ->OrderBy('customers.name', 'ASC')->get();
         $city_list = \DB::table('cities')->where('status', '=', '1')->get();
         $getbalance = GetBalance::all(); 
         return view('admin.get_balance.get_payment_balance', compact(['getbalance', 'customer_list', 'city_list']));
@@ -113,8 +130,8 @@ class FinanceController extends Controller
             'type' => "Payment Receipt",
             'document_number' => $payment_get_number,
             'company_name' => $company_name,
-            'debit' => '0.00',
-            'credit' => abs($request->input('amount')),
+            'debit' => abs($request->input('amount')),
+            'credit' => '0.00',
             'balance' => $request->input('amount'),
         ]);
         $customer->save();
@@ -186,5 +203,62 @@ class FinanceController extends Controller
         $product_sale->save();
 
         return redirect()->route('view_invoice', ['id' => $bill_id]);
+    }
+
+
+    public function show_receipt_list(Request $request)
+    {
+         
+        $customer_list = \DB::table('customers')
+                        ->leftjoin('cities', 'customers.city_id', '=', 'cities.id') 
+                        ->Select('customers.id','customers.name', 'customers.company_name', 'cities.name')
+                        ->where('customers.status','=', '1')
+                        ->OrderBy('customers.name', 'ASC')->get();
+         
+        return view('admin.finance.show_receipt_list', compact(['customer_list']));
+    }
+
+    public function show_list($id){ 
+        $employees = PaymentReceipt::select('*')->where('company_name', $id)->where('status', '1')->get(); 
+         
+         // Fetch all records
+         $userData['data'] = $employees;
+    
+         echo json_encode($userData);
+         exit;
+      
+    }
+
+    public function delete_payment_record(Request $request,$id){
+        $payment_recived = PaymentReceipt::find($id);  
+        $payment_recived->status = '0';
+        $payment_recived->save();
+        $customer = Customer::where('company_name', '=', $payment_recived->company_name)->first(); 
+        $update_amount = $customer->balance - $payment_recived->amount; 
+        Customer::where('company_name', '=', $payment_recived->company_name) 
+                 ->update([ 'balance' => $update_amount]);
+        DB::table('statements')->where('document_number', '=', $payment_recived->payment_receipt_number)->delete();
+        return redirect()->route('show_receipt_list');
+        
+    }
+
+    //ledger report
+
+    public function get_ledger(Request $request)
+    {
+        $customer_list = \DB::table('customers')
+                        ->leftjoin('cities', 'customers.city_id', '=', 'cities.id') 
+                        ->Select('customers.name', 'customers.company_name', 'cities.name')
+                        ->where('customers.status','=', '1')
+                        ->OrderBy('customers.name', 'ASC')->get();
+        $StatementRecords = null;
+        $company_name = "";
+        if ($request->method() == "POST") {
+            $company_name = $request->input('company_name');
+            $StatementRecords = Statement::where('company_name', '=', $company_name)
+                ->OrderBy('id', 'ASC')->get();
+        }
+
+        return view('admin.finance.report.ledger', compact(['StatementRecords', 'customer_list', 'company_name']));
     }
 }
