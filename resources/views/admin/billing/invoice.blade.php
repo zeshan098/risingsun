@@ -562,7 +562,40 @@
 
     });
 </script>
-
+<script type="text/javascript">
+    $(function() {
+        $(document).on("keyup change paste", "td > input.qty", function() {
+            var selected_qty = $(this).val();
+            row = $(this).closest("tr"); 
+            product_id = row.find("td select.products").val(); 
+            // console.log(product_id);
+            var token = $("input[name='_token']").val();
+            $.ajax({
+                url: "{{ url('admin/get_product_qty') }}",
+                method: 'POST',
+                data: {
+                    item_name: product_id,
+                    _token: token
+                },
+                success: function(data) {
+                    $(this).closest('tr').find('.code').val('zz');
+                    $(".product").each(function() {
+                        $(this).find('option').not(':first').remove();
+                    });
+                    $.each(data, function(i, item) { 
+                        var db_qty = item.quantity;
+                        console.log(db_qty);
+                        if(parseInt(selected_qty) > parseInt(db_qty)){
+                            alert("Quantity Increase");
+                        }else{
+                            console.log("Ok");
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
 <script>
     document.getElementById("btnPrint").onclick = function() {
         printElement(document.getElementById("printThis"));

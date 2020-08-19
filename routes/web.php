@@ -112,6 +112,7 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth',  'middleware' => 'ro
    Route::post('create_invoice', 'BillingController@create_invoice')->name('create_invoice');
    Route::Post('show_product', 'BillingController@show_product')->name('show_product');
    Route::get('get_invoice', 'BillingController@get_invoice')->name('get_invoice');
+   Route::Post('get_product_qty', 'BillingController@get_product_qty')->name('get_product_qty');
    Route::get('get_product_invoice', 'BillingController@get_product_invoice')->name('get_product_invoice');
 
    //Invoice Listing

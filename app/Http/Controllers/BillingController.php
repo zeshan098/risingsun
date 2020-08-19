@@ -288,6 +288,20 @@ class BillingController extends Controller
          
     }
 
+
+    public function get_product_qty(Request $request)
+    {
+        
+        $products_qty = \DB::table('product_locations') 
+                        ->Select('quantity')
+                        ->where('product_id', $request->input('item_name'))
+                        ->where('location', 'WH')->get();
+ 
+         
+        return response()->json($products_qty);
+         
+    }
+
     public function create_invoice(Request $request){
         
         $role = Auth::user()->role; 
