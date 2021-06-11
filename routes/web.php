@@ -108,6 +108,7 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth',  'middleware' => 'ro
     Route::post('incentive_reporting', 'IncentiveController@incentive_reporting')->name('incentive_reporting');
     Route::get('collection_report', 'IncentiveController@collection_report')->name('collection_report');
     Route::post('collection_reporting', 'IncentiveController@collection_reporting')->name('collection_reporting');
+    Route::get('new', 'IncentiveController@new')->name('new');
  
 });
 Route::group(['prefix' => 'executive',  'middleware' => 'auth',  'middleware' => 'role:admin,executive', 'as' => 'executive.'], function(){
