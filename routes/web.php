@@ -11,11 +11,23 @@
   |
  */
 
+Route::get('/clear-cache', function() {
+    Artisan::call('cache:clear'); 
+    return "Cache is cleared";
+});
+//Clear Config cache:
+Route::get('/config-cache', function() {
+    $exitCode = Artisan::call('config:cache');
+    return '<h1>Clear Config cleared</h1>';
+});
 Route::get('/', function () {
     // return view('welcome');
     return redirect()->route('login');
 });
+// Route::get('/donation', 'DonationsController@donation')->name('donation');
+// Route::Post('/donation_submit', 'DonationsController@donation_submit')->name('donation_submit');
  
+// Route::get('send_alert', 'DonationsController@send_alert')->name('send_alert');
 // Login Routes...
 Route::get('login', ['as' => 'login', 'uses' => 'Auth\LoginController@showLoginForm']);
 Route::post('login', ['as' => 'login.post', 'uses' => 'Auth\LoginController@login']);
@@ -40,7 +52,7 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth',  'middleware' => 'ro
     //Route::get('dashboard', 'DashboardController@index')->name('dashboard');
     
     Route::get('/', function () {
-        return redirect()->route('login');
+        return redirect()->route('home');
     });
     Route::get('users', 'UserController@users')->name('list_users');
     Route::get('add_user', 'UserController@add_user_view')->name('add_user');
@@ -54,99 +66,76 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth',  'middleware' => 'ro
     Route::post('password/{id}', 'UserController@password')->name('password'); 
 
 
-    //Dashborad
-    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
-    // Route::get('ss', 'DashboardController@ss')->name('ss');
+    Route::get('show_donation', 'DonationsController@show_donation')->name('show_donation');
+    Route::get('donation', 'DonationsController@donation')->name('donation');
+    Route::Post('donation_submit', 'DonationsController@donation_submit')->name('donation_submit');
+    Route::get('view_donation/{id}', 'DonationsController@view_donation')->name('view_donation');
+    Route::get('generate-pdf/{id}','DonationsController@generatePDF')->name('generate-pdf');
+    Route::get('delete_donation/{id}', 'DonationsController@delete_donation')->name('delete_donation');
+    Route::get('assign_list', 'DonationsController@assign_list')->name('assign_list');
+    Route::get('edit_donation/{id}', 'DonationsController@edit_donation')->name('edit_donation');
+    Route::Post('update_donation/{id}', 'DonationsController@update_donation')->name('update_donation');
+    //SMS
+    Route::get('add_sms', 'DonationsController@add_sms')->name('add_sms');
+    Route::Post('sms_submit', 'DonationsController@sms_submit')->name('sms_submit');
+    Route::get('sms_list', 'DonationsController@sms_list')->name('sms_list');
+    Route::get('delete_sms/{id}', 'DonationsController@delete_sms')->name('delete_sms');
+    Route::get('update_sms/{id}', 'DonationsController@update_sms')->name('update_sms');
+    Route::post('sms/{id}', 'DonationsController@sms')->name('sms'); 
     
-    //Product_Catagory
-    Route::get('category', 'InventoryController@category')->name('category');
-    Route::Post('add_category', 'InventoryController@add_category')->name('add_category');
-    Route::get('update_category/{id}', 'InventoryController@update_category')->name('update_category');
-    Route::post('edit_category/{id}', 'InventoryController@edit_category')->name('edit_category');
-    Route::get('delete_category/{id}', 'InventoryController@delete_category')->name('delete_category');
-
-    //Brand 
-    Route::Post('add_brand', 'InventoryController@add_brand')->name('add_brand');
-    //Product
-    Route::get('product', 'InventoryController@product')->name('product');
-    Route::post('add_product', 'InventoryController@add_product')->name('add_product');
-    Route::post('check_code', 'InventoryController@check_code')->name('check_code');
-    Route::get('update_product/{id}', 'InventoryController@update_product')->name('update_product');
-    Route::post('edit_product/{id}', 'InventoryController@edit_product')->name('edit_product');
-    Route::get('delete_product/{id}', 'InventoryController@delete_product')->name('delete_product');
+    //Customer
+    Route::post('customer_add', 'DonationsController@customer_add')->name('customer_add');
+    Route::post('search_customer', 'DonationsController@search_customer')->name('search_customer');
+    Route::get('customer_list', 'DonationsController@customer_list')->name('customer_list');
+    Route::get('customer_detail/{id}', 'DonationsController@customer_detail')->name('customer_detail');
+    Route::post('update_detail/{id}', 'DonationsController@update_detail')->name('update_detail');
+    Route::get('delete_donor/{id}', 'DonationsController@delete_donor')->name('delete_donor');
     
-    //Add Vender
-   Route::get('vendor', 'InventoryController@vendor')->name('vendor');
-   Route::post('add_vendor', 'InventoryController@add_vendor')->name('add_vendor');
-   Route::get('update_vendor/{id}', 'InventoryController@update_vendor')->name('update_vendor');
-   Route::post('edit_vendor/{id}', 'InventoryController@edit_vendor')->name('edit_vendor');
-   Route::get('delete_vendor/{id}', 'InventoryController@delete_vendor')->name('delete_vendor');
-   
-   //Add Product Qty
-   Route::get('place_order', 'InventoryController@place_order')->name('place_order');
-   Route::post('add_order_qty', 'InventoryController@add_order_qty')->name('add_order_qty'); 
-
-
-   Route::get('view_place_order', 'InventoryController@view_place_order')->name('view_place_order');
-   Route::post('place_order_report', 'InventoryController@place_order_report')->name('place_order_report');
-   
-   //vendor payment
-   Route::get('show', 'VendorPaymentController@show')->name('show');
-   Route::get('vendor_pending_payment/{id}', 'VendorPaymentController@vendor_pending_payment')->name('vendor_pending_payment');
-   Route::get('edit_vendor_payment/{id}', 'VendorPaymentController@edit_vendor_payment')->name('edit_vendor_payment');
-   Route::post('paid_payment/{id}', 'VendorPaymentController@paid_payment')->name('paid_payment');
-
-   //vendor  report
-   Route::get('vendor_payment_report', 'VendorPaymentController@vendor_payment_report')->name('vendor_payment_report');
-   Route::post('view_vendor_payment_report', 'VendorPaymentController@view_vendor_payment_report')->name('view_vendor_payment_report');
-   
-   //city
-   Route::get('city', 'BillingController@city')->name('city');
-   Route::post('add_city', 'BillingController@add_city')->name('add_city');
-   Route::get('update_city/{id}', 'BillingController@update_city')->name('update_city');
-   Route::post('edit_city/{id}', 'BillingController@edit_city')->name('edit_city');
-   Route::get('delete_city/{id}', 'BillingController@delete_city')->name('delete_city');
-
-   //Invoice
-   Route::get('invoice', 'BillingController@invoice')->name('invoice');
-   Route::post('create_invoice', 'BillingController@create_invoice')->name('create_invoice');
-   Route::Post('show_product', 'BillingController@show_product')->name('show_product');
-   Route::get('get_invoice', 'BillingController@get_invoice')->name('get_invoice');
-   Route::Post('get_product_qty', 'BillingController@get_product_qty')->name('get_product_qty');
-   Route::get('get_product_invoice', 'BillingController@get_product_invoice')->name('get_product_invoice');
-
-   //Invoice Listing
-   Route::get('invoice_list', 'BillingController@invoice_list')->name('invoice_list');
-   Route::get('view_invoice/{id}', 'BillingController@view_invoice')->name('view_invoice');
-   Route::get('delete_invoice/{id}', 'BillingController@delete_invoice')->name('delete_invoice');
-   
-   //Add Customer
-   Route::get('customer_list', 'BillingController@customer_list')->name('customer_list');
-   Route::Post('add_customer', 'BillingController@add_customer')->name('add_customer');
-   Route::get('delete_customer/{id}', 'BillingController@delete_customer')->name('delete_customer');
-   Route::get('update_customer/{id}', 'BillingController@update_customer')->name('update_customer');
-   Route::post('edit_customer/{id}', 'BillingController@edit_customer')->name('edit_customer');
-   
-   // Finance
-   Route::get('get-payment-receipt', 'FinanceController@get_payment_receipt')->name('get-payment-receipt');
-   Route::post('post-payment-receipt', 'FinanceController@post_payment_receipt')->name('post-payment-receipt');
-   Route::get('statement', 'FinanceController@get_statement')->name('statement');
-   Route::post('statement', 'FinanceController@get_statement')->name('statement');
-   Route::post('return_product', 'FinanceController@return_product')->name('return_product');
-   
-   //payment recipt view and delete
-   Route::get('show_receipt_list', 'FinanceController@show_receipt_list')->name('show_receipt_list');
-   Route::get('show_list/{id}', 'FinanceController@show_list')->name('show_list');
-  
-   //delete record
-   Route::get('delete_payment_record/{id}', 'FinanceController@delete_payment_record')->name('delete_payment_record');
-   //Add Balance 
-   Route::get('get-payment-balance', 'FinanceController@get_payment_balance')->name('get-payment-balance');
-   Route::post('post-payment-balance', 'FinanceController@post_payment_balance')->name('post-payment-balance');
-
-   //Ledger Report
-   Route::get('ledger_report', 'FinanceController@get_ledger')->name('ledger_report');
-   Route::post('ledger_report', 'FinanceController@get_ledger')->name('ledger_report');
+    //donar add
+    Route::get('add_donar', 'DonationsController@add_donar')->name('add_donar');
+    Route::post('create_donar', 'DonationsController@create_donar')->name('create_donar');
+    
+    //Incentive
+    Route::get('add_incentive', 'IncentiveController@add_incentive')->name('add_incentive');
+    Route::post('create_incentive', 'IncentiveController@create_incentive')->name('create_incentive');
+    Route::get('incentive_list', 'IncentiveController@incentive_list')->name('incentive_list');
+    Route::get('delete_incentive/{id}', 'IncentiveController@delete_incentive')->name('delete_incentive');
+    Route::get('update_incentive/{id}', 'IncentiveController@update_incentive')->name('update_incentive');
+    Route::post('complete_incentive/{id}', 'IncentiveController@complete_incentive')->name('complete_incentive'); 
+    
+    //Report
+    Route::get('incentive_report', 'IncentiveController@incentive_report')->name('incentive_report');
+    Route::post('incentive_reporting', 'IncentiveController@incentive_reporting')->name('incentive_reporting');
+    Route::get('collection_report', 'IncentiveController@collection_report')->name('collection_report');
+    Route::post('collection_reporting', 'IncentiveController@collection_reporting')->name('collection_reporting');
+ 
 });
-
-
+Route::group(['prefix' => 'executive',  'middleware' => 'auth',  'middleware' => 'role:admin,executive', 'as' => 'executive.'], function(){
+    Route::get('show_donation', 'DonationsController@show_donation')->name('show_donation');
+    Route::get('donation', 'DonationsController@donation')->name('donation');
+    Route::Post('donation_submit', 'DonationsController@donation_submit')->name('donation_submit');
+    Route::get('view_donation/{id}', 'DonationsController@view_donation')->name('view_donation');
+    Route::get('generate-pdf/{id}','DonationsController@generatePDF')->name('generate-pdf');
+    Route::get('delete_donation/{id}', 'DonationsController@delete_donation')->name('delete_donation');
+    Route::get('assign_list', 'DonationsController@assign_list')->name('assign_list');
+    Route::get('edit_donation/{id}', 'DonationsController@edit_donation')->name('edit_donation');
+    Route::Post('update_donation/{id}', 'DonationsController@update_donation')->name('update_donation');
+    //SMS
+    Route::get('add_sms', 'DonationsController@add_sms')->name('add_sms');
+    Route::Post('sms_submit', 'DonationsController@sms_submit')->name('sms_submit');
+    Route::get('sms_list', 'DonationsController@sms_list')->name('sms_list');
+    Route::get('delete_sms/{id}', 'DonationsController@delete_sms')->name('delete_sms');
+    Route::get('update_sms/{id}', 'DonationsController@update_sms')->name('update_sms');
+    Route::post('sms/{id}', 'DonationsController@sms')->name('sms'); 
+    
+    //Update Password 
+    Route::get('update_password/{id}', 'UserController@update_password')->name('update_password');
+    Route::post('password/{id}', 'UserController@password')->name('password'); 
+    
+    //Customer
+    Route::post('customer_add', 'DonationsController@customer_add')->name('customer_add');
+    Route::post('search_customer', 'DonationsController@search_customer')->name('search_customer');
+    
+    
+    
+});   

@@ -30,6 +30,10 @@
                         <input type="text" class="form-control" name="last_name" id="name" placeholder="Last Name" required="">
                     </div> 
                     <div class="form-group">
+                        <label for="first_name">Phone #</label>
+                        <input type="text" class="form-control" name="phone_no" id="name" placeholder="03*********" required="">
+                    </div> 
+                    <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" class="form-control" name="email" id="email" placeholder="Email" required="">
                     </div>
@@ -41,6 +45,7 @@
                         <label>Select</label>
                         <select class="form-control" name="role" required="">
                             <option value="admin">Admin</option> 
+                            <option value="executive">Executive</option> 
                         </select>
                     </div>
                      

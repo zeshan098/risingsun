@@ -12,7 +12,7 @@ class Remaining_Fee extends Command
      *
      * @var string
      */
-    protected $signature = 'Remaining_Fee:fee';
+    protected $signature = 'remaining_fee:fee';
 
     /**
      * The console command description.
@@ -38,15 +38,15 @@ class Remaining_Fee extends Command
      */
     public function handle()
     {
-        // $student_remaining_fee = \DB::select("INSERT INTO remaining_bus_fees (arrears, student_detail_id, date)
-            
-        //   SELECT Case when rbf.arrears is NUll then sbf.remarks else sbf.remarks + rbf.arrears end as plus, sbf.student_detail_id,  sbf.pay_day FROM student_bus_fares sbf
-        //     left join remaining_bus_fees rbf on sbf.student_detail_id = rbf.student_detail_id
-        //     WHERE YEAR(sbf.pay_day) = YEAR(CURRENT_DATE - INTERVAL 1 MONTH)
-        //     AND MONTH(sbf.pay_day) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH)
-        //     and sbf.remarks is not Null");
-
-        // $this->info('The  messages were sent successfully!');
+        \Log::info("Cron is working fine!");
+     
+        /*
+           Write your database logic we bellow:
+           Item::create(['name'=>'hello new']);
+        */
+        $alert_val = DB::select(" SELECT * FROM donations WHERE TO_DAYS(to_date)=To_DAYS(NOW())+3 " );
+      
+        $this->info('Demo:Cron Cummand Run successfully!');
         
     }
 }

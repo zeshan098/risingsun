@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use DB;
 
 class UserController extends Controller
@@ -88,13 +89,19 @@ class UserController extends Controller
 
      //update password
     public function update_password($id){
+        $role = Auth::user()->role;
         $user_pass = User::find($id); 
-         
-        return view('admin.update_password') 
-        ->with('user_pass', $user_pass);
+        if($role == 'admin'){  
+            return view('admin.update_password') 
+            ->with('user_pass', $user_pass);
+        }else{
+            return view('executive.template.update_password') 
+            ->with('user_pass', $user_pass);
+        }
     }
     public function password(Request $request, $id){
         
+        $role = Auth::user()->role;
         if(isset($_POST['submit'])){
             $update_password = DB::table('users')->where('id', $id)
                             ->update(['password'=> Hash::make($request->input('password')) 
@@ -104,7 +111,11 @@ class UserController extends Controller
             'message' => 'Password Update', 
             'alert-type' => 'success'
         );
-         
-        return redirect('admin/users')->with($notification);
+        if($role == 'admin'){   
+            return redirect('admin/users')->with($notification);
+        }
+        else{
+            return redirect('executive/show_donation')->with($notification);
+        }
     }
 }

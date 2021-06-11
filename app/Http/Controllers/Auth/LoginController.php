@@ -67,10 +67,10 @@ class LoginController extends Controller
             }
             // Authentication passed...
             else if(Auth::user()->role == "admin"){
-                return redirect()->intended('admin/users');
+                return redirect()->intended('admin/show_donation');
             }
-            else if(Auth::user()->role == "clerk"){
-                return redirect()->intended('clerk/oil_report');
+            else if(Auth::user()->role == "executive"){
+                return redirect()->intended('executive/show_donation');
             }
             // else if(Auth::user()->role == "oil_filling"){
             //     return redirect()->intended('oil_filling/filing_detail');

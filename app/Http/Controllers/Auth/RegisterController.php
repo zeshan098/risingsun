@@ -82,6 +82,7 @@ class RegisterController extends Controller
             'last_name' => $request->input('last_name'),
             'role' => $request->input('role'),
             'email' => $request->input('email'), 
+            'phone_no' => $request->input('phone_no'), 
             'password' => Hash::make($request->input('password')),
         ])){
             return redirect('/admin/users');

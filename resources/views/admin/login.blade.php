@@ -33,8 +33,7 @@
         </div>
         <!-- /.col -->
         <div class="col-xs-8">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
-          <button type="submit" class="btn btn-primary btn-block btn-flat">New Member! Sign Up</button>
+          <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button> 
         </div>
         <!-- /.col -->
         <div class="col-xs-2">

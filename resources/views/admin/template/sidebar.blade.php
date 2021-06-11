@@ -30,20 +30,7 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">Menu</li>
-            <!-- Optionally, you can add icons to the links -->
-<!--            <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Users Management</span></a></li>
-            <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>-->
-            <li class="{{ $controller_name == "DashboardController" ? 'active' : '' }} treeview">
-                <a href="#"><i class="fa fa-group"></i> <span>Dashboard</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="{{ $action_name == "add_user_view" ? 'active' : '' }}"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
-                     
-                </ul>
-            </li>
+            
             <li class="{{ $controller_name == "UserController" ? 'active' : '' }} treeview">
                 <a href="#"><i class="fa fa-group"></i> <span>Users Management</span>
                     <span class="pull-right-container">
@@ -54,64 +41,40 @@
                     <li class="{{ $action_name == "add_user_view" ? 'active' : '' }}"><a href="{{ url('admin/add_user') }}">Add New</a></li>
                     <li class="{{ $action_name == "users" ? 'active' : '' }}"><a href="{{ url('admin/users') }}">Approved Users</a></li>
                     <li class="{{ $action_name == "pending_user" ? 'active' : '' }}"><a href="{{ url('admin/pending_user') }}">Pending User</a></li>
+                    <li class="{{ $action_name == "add_user_view" ? 'active' : '' }}"><a href="{{ url('executive/update_password/' . Auth::user()->id ) }}">Update Password</a></li>
                 </ul>
             </li>
-            
-            <li class="{{ $controller_name == "BillingController" ? 'active' : '' }} treeview">
-                <a href="#"><i class="fa fa-group"></i> <span>Invoice</span>
+            <li class="{{ $controller_name == "DonationsController" ? 'active' : '' }} treeview">
+                <a href="#"><i class="fa fa-group"></i> <span>Donation</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ $action_name == "city" ? 'active' : '' }}"><a href="{{ url('admin/city') }}">Add Cities</a></li> 
-                    <li class="{{ $action_name == "customer_list" ? 'active' : '' }}"><a href="{{ url('admin/customer_list') }}">Add Customer</a></li>
-                    <li class="{{ $action_name == "invoice" ? 'active' : '' }}"><a href="{{ url('admin/invoice') }}">Create Invoice</a></li> 
-                    <li class="{{ $action_name == "invoice_list" ? 'active' : '' }}"><a href="{{ url('admin/invoice_list') }}">Invoice List</a></li> 
-                
+                    <li class="{{ $action_name == "add_sms" ? 'active' : '' }}"><a href="{{ url('admin/add_sms') }}">Add SMS</a></li>
+                    <li class="{{ $action_name == "sms_list" ? 'active' : '' }}"><a href="{{ url('admin/sms_list') }}">SMS List</a></li>  
+                    <li class="{{ $action_name == "add_donar" ? 'active' : '' }}"><a href="{{ url('admin/add_donar') }}">Add Donor</a></li>  
+                    <li class="{{ $action_name == "customer_list" ? 'active' : '' }}"><a href="{{ url('admin/customer_list') }}">Donor List</a></li>  
+                    <li class="{{ $action_name == "donation" ? 'active' : '' }}"><a href="{{ url('admin/donation') }}">Add Donation</a></li>
+                    <li class="{{ $action_name == "show_donation" ? 'active' : '' }}"><a href="{{ url('admin/show_donation') }}">Donation List</a></li>
+                    <li class="{{ $action_name == "assign_list" ? 'active' : '' }}"><a href="{{ url('admin/assign_list') }}">Assign List</a></li>
                 </ul>
             </li> 
-            <li class="{{ $controller_name == "InventoryController" ? 'active' : '' }} treeview">
-                <a href="#"><i class="fa fa-group"></i> <span>Inventory</span>
+            <li class="{{ $controller_name == "IncentiveController" ? 'active' : '' }} treeview">
+                <a href="#"><i class="fa fa-group"></i> <span>Reports</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ $action_name == "vendor" ? 'active' : '' }}"><a href="{{ url('admin/vendor') }}">Add Vendor</a></li> 
-                    <li class="{{ $action_name == "product" ? 'active' : '' }}"><a href="{{ url('admin/product') }}">Add Product</a></li> 
-                    <li class="{{ $action_name == "place_order" ? 'active' : '' }}"><a href="{{ url('admin/place_order') }}">Place Order</a></li>
-                    <li class="{{ $action_name == "view_place_order" ? 'active' : '' }}"><a href="{{ url('admin/view_place_order') }}">Place Order Report</a></li>    
-                
-                
+                    <li class="{{ $action_name == "add_incentive" ? 'active' : '' }}"><a href="{{ url('admin/add_incentive') }}">Add Incentive</a></li>
+                    <li class="{{ $action_name == "incentive_list" ? 'active' : '' }}"><a href="{{ url('admin/incentive_list') }}">Incentive List</a></li>
+                    <li class="{{ $action_name == "incentive_report" ? 'active' : '' }}"><a href="{{ url('admin/incentive_report') }}">Incentive Report</a></li> 
+                    <li class="{{ $action_name == "collection_report" ? 'active' : '' }}"><a href="{{ url('admin/collection_report') }}">Collection List Report</a></li> 
                 </ul>
-            </li>
-
-            <li class="{{ $controller_name == "VendorPaymentController" ? 'active' : '' }} treeview">
-                <a href="#"><i class="fa fa-group"></i> <span>Vendor Payment</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="{{ $action_name == "show" ? 'active' : '' }}"><a href="{{ url('admin/show') }}">Vendor Payment</a></li>   
-                    <li class="{{ $action_name == "vendor_payment_report" ? 'active' : '' }}"><a href="{{ url('admin/vendor_payment_report') }}">Vendor Payment Report</a></li>   
-                
-                </ul>
-            </li>
-            <li class="{{ $controller_name == "FinanceController" ? 'active' : '' }} treeview">
-                <a href="#"><i class="fa fa-money"></i> <span>Finance</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="{{ $action_name == "get_statement" ? 'active' : '' }}"><a href="{{ url('admin/statement') }}">Statement</a></li>
-                    <li class="{{ $action_name == "get-payment-receipt" ? 'active' : '' }}"><a href="{{ url('admin/get-payment-receipt') }}">Payment Receipt</a></li> 
-                    <li class="{{ $action_name == "get-payment-balance" ? 'active' : '' }}"><a href="{{ url('admin/get-payment-balance') }}">Add Old balance</a></li>
-                    <li class="{{ $action_name == "ledger_report" ? 'active' : '' }}"><a href="{{ url('admin/ledger_report') }}">Ledger</a></li>
-                </ul>
-            </li>
+            </li> 
+            
+             
              
         </ul>
         <!-- /.sidebar-menu -->

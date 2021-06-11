@@ -25,10 +25,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('Remaining_Fee:fee')->everyMinute();
-        //$schedule->command('CronJob:cronjob')->everyMinute();
-        //->monthlyOn(1, '24:00');
-       
+    
+        $schedule->command('remaining_fee:fee')
+                 ->everyMinute();
+    
     }
 
     /**
