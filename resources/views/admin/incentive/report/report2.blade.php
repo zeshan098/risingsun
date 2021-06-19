@@ -58,21 +58,19 @@
                         @endforeach
                         </tbody>
                         <tfoot>
-                            <tr> 
-                                <th>Receipt #</th> 
-                                <th>Date</th> 
-                                <th>Donor Name</th> 
-                                <th>Saima</th> 
-                                <th>Sami</th> 
-                                <th>Saqib</th> 
-                                <th>Zeeshan</th> 
-                                <th>Baber</th> 
-                                <th>Javeria</th> 
-                                <th>Asif</th> 
-                                <th>Luqman</th>
+                            <tr>
+                            @foreach($total_value as $total_value)
+                            <th colspan="10" style="text-align:right">Total: {{$total_value->total_value}}</th>
+                            @endforeach
+                            <th></th>
                             </tr>
                         </tfoot>
                     </table>
+                    <div align="heading" style="display:none">
+                    @foreach($total_values as $total_values)
+                    <input type="text" id="total_val" value ="{{$total_values->total_value}}" /> 
+                    @endforeach
+                </div>
                 </div>
                 <!-- /.box-body -->
             </div>
@@ -201,10 +199,24 @@ $(document).ready(function() {
 									{
 										alignment: 'right',
 										text: ['page ', { text: page.toString() },	' of ',	{ text: pages.toString() }]
-									}
+									},
+                                    {
+                                    alignment: 'center',
+                                    italics: true,
+                                    text:[
+                                        {text: 'Total:'+$("#total_val").val()} 
+                                        ],
+             
+                                   fontSize: 25,
+                                    margin:[0,0],
+                                    width:'*'
+
+                                },
+								
 								],
-								margin: 20
+                                margin: 20
 							}
+                                
 						});
                     var objLayout = {};
 						objLayout['hLineWidth'] = function(i) { return .5; };

@@ -37,6 +37,9 @@ class RedirectIfAuthenticated
             else if(Auth::user()->role == "executive"){
                 return redirect()->intended('executive/show_donation');
             }
+            else if(Auth::user()->role == "finance"){
+                return redirect()->intended('finance/incentive_report');
+            }
             // else if(Auth::user()->role == "oil_filling"){
             //     return redirect()->intended('oil_filling/filing_detail');
             // }

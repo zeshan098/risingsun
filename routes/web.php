@@ -108,7 +108,8 @@ Route::group(['prefix' => 'admin',  'middleware' => 'auth',  'middleware' => 'ro
     Route::post('incentive_reporting', 'IncentiveController@incentive_reporting')->name('incentive_reporting');
     Route::get('collection_report', 'IncentiveController@collection_report')->name('collection_report');
     Route::post('collection_reporting', 'IncentiveController@collection_reporting')->name('collection_reporting');
-    Route::get('new', 'IncentiveController@new')->name('new');
+    Route::get('resource_report', 'IncentiveController@resource_report')->name('resource_report');
+    Route::post('resource_reporting', 'IncentiveController@resource_reporting')->name('resource_reporting');
  
 });
 Route::group(['prefix' => 'executive',  'middleware' => 'auth',  'middleware' => 'role:admin,executive', 'as' => 'executive.'], function(){
@@ -139,4 +140,15 @@ Route::group(['prefix' => 'executive',  'middleware' => 'auth',  'middleware' =>
     
     
     
+});   
+
+Route::group(['prefix' => 'finance',  'middleware' => 'auth',  'middleware' => 'role:admin,finance', 'as' => 'finance.'], function(){
+   
+   //Report
+   Route::get('incentive_report', 'IncentiveController@incentive_report')->name('incentive_report');
+   Route::post('incentive_reporting', 'IncentiveController@incentive_reporting')->name('incentive_reporting');
+   Route::get('collection_report', 'IncentiveController@collection_report')->name('collection_report');
+   Route::post('collection_reporting', 'IncentiveController@collection_reporting')->name('collection_reporting');
+   Route::get('resource_report', 'IncentiveController@resource_report')->name('resource_report');
+   Route::post('resource_reporting', 'IncentiveController@resource_reporting')->name('resource_reporting');
 });   
