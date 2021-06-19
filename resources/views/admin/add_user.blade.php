@@ -46,6 +46,7 @@
                         <select class="form-control" name="role" required="">
                             <option value="admin">Admin</option> 
                             <option value="executive">Executive</option> 
+                            <option value="finance">Finance</option> 
                         </select>
                     </div>
                      

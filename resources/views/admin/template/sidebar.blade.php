@@ -71,6 +71,7 @@
                     <li class="{{ $action_name == "incentive_list" ? 'active' : '' }}"><a href="{{ url('admin/incentive_list') }}">Incentive List</a></li>
                     <li class="{{ $action_name == "incentive_report" ? 'active' : '' }}"><a href="{{ url('admin/incentive_report') }}">Incentive Report</a></li> 
                     <li class="{{ $action_name == "collection_report" ? 'active' : '' }}"><a href="{{ url('admin/collection_report') }}">Collection List Report</a></li> 
+                    <li class="{{ $action_name == "resource_report" ? 'active' : '' }}"><a href="{{ url('admin/resource_report') }}">Resource Report</a></li> 
                 </ul>
             </li> 
             

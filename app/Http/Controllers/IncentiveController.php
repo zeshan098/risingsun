@@ -177,7 +177,9 @@ class IncentiveController extends Controller
         if($role == 'admin'){
             return view('admin.incentive.report.incentive_report')->with($data);
         }elseif($role == 'executive'){
-            return redirect('executive.incentive.report.incentive_report')->with($notification);
+            return view('executive.incentive.report.incentive_report')->with($data);
+        }elseif($role == 'finance'){ 
+            return view('finance.incentive.report.incentive_report')->with($data);
         }else{
             return redirect()->back();
         }
@@ -205,6 +207,8 @@ class IncentiveController extends Controller
             ->with('to_date', $to_date);
         }elseif($role == 'executive'){
             return view('executive.incentive.report.report1')->with($data)->with( 'from_date', $from_date)->with('to_date', $to_date);
+        }elseif($role == 'finance'){
+            return view('finance.incentive.report.report1')->with($data)->with( 'from_date', $from_date)->with('to_date', $to_date);
         }else{
             return redirect()->back();
         }
@@ -222,7 +226,9 @@ class IncentiveController extends Controller
         if($role == 'admin'){
             return view('admin.incentive.report.collection_report')->with($data);
         }elseif($role == 'executive'){
-            return redirect('executive.incentive.report.collection_report')->with($notification);
+            return view('executive.incentive.report.collection_report')->with($data);
+        }elseif($role == 'finance'){
+            return view('finance.incentive.report.collection_report')->with($data);
         }else{
             return redirect()->back();
         }
@@ -251,10 +257,77 @@ class IncentiveController extends Controller
                             and dn.status = 'Complete' ");
        
         $data['collection_report'] = $collection_report;
+
+        $total_value = DB::select(" select FORMAT(sum(dn.rupees),0) as total_value from donations dn
+                                    where dn.enter_date between '".$from_date."'  And  '".$to_date."'
+                                    and dn.status = 'Complete' ");
+        $total_values = DB::select(" select FORMAT(sum(dn.rupees),0) as total_value from donations dn
+                                    where dn.enter_date between '".$from_date."'  And  '".$to_date."'
+                                    and dn.status = 'Complete' ");
         if($role == 'admin'){
-            return view('admin.incentive.report.report2')->with($data)->with( 'from_date', $from_date)->with('to_date', $to_date);
+            return view('admin.incentive.report.report2')->with($data)
+            ->with( 'from_date', $from_date)
+            ->with('to_date', $to_date)
+            ->with('total_value', $total_value)
+            ->with('total_values', $total_values);
         }elseif($role == 'executive'){
-            return view('executive.incentive.report.report2')->with($data)->with( 'from_date', $from_date)->with('to_date', $to_date);
+            return view('executive.incentive.report.report2')
+            ->with($data)->with( 'from_date', $from_date)
+            ->with('to_date', $to_date)
+            ->with('total_value', $total_value)
+            ->with('total_values', $total_values);
+        }elseif($role == 'finance'){
+            return view('finance.incentive.report.report2')
+            ->with($data)->with( 'from_date', $from_date)
+            ->with('to_date', $to_date)
+            ->with('total_value', $total_value)
+            ->with('total_values', $total_values);
+        }else{
+            return redirect()->back();
+        }
+    }
+
+    public function resource_report()
+    {
+        $role = Auth::user()->role;
+        $data['page_title'] = "All Student";
+        $data['page_description'] = "Welcome to Admin Dashboard";
+        if($role == 'admin'){
+            return view('admin.incentive.report.resource_report')->with($data);
+        }elseif($role == 'executive'){
+            return view('executive.incentive.report.resource_report')->with($data);
+        }elseif($role == 'finance'){
+            return view('finance.incentive.report.resource_report')->with($data);
+        }else{
+            return redirect()->back();
+        }
+        
+    }
+
+
+    public function resource_reporting(Request $request)
+    {
+        $role = Auth::user()->role;
+        $from_date = $request->input('from_date');
+        $to_date = $request->input('to_date');
+       
+        $resource_report = DB::select("SELECT dn.receipt,dn.enter_date,dn.cust_name, dn.address, FORMAT(dn.rupees,0) as rupees,
+                                        dn.donar_status,dn.phone_no,dn.sum_of_rupees,dn.drawn_on,dn.draft_date,dn.draft_no, dn.donation_type,
+                                        dn.no_of_children,dn.from_date, dn.to_date,dn.remarks 
+                                        from donations dn INNER join incentives incen on dn.user_id = incen.user_id 
+                                        INNER join users us on dn.user_id = us.id and incen.user_id = us.id  
+                                        where dn.enter_date between '".$from_date."'  And  '".$to_date."' 
+                                        and dn.status = 'Complete' ");
+       
+        $data['resource_report'] = $resource_report;
+        if($role == 'admin'){
+            return view('admin.incentive.report.report3')->with($data)
+            ->with( 'from_date', $from_date)
+            ->with('to_date', $to_date);
+        }elseif($role == 'executive'){
+            return view('executive.incentive.report.report3')->with($data)->with( 'from_date', $from_date)->with('to_date', $to_date);
+        }elseif($role == 'finance'){
+            return view('finance.incentive.report.report3')->with($data)->with( 'from_date', $from_date)->with('to_date', $to_date);
         }else{
             return redirect()->back();
         }
