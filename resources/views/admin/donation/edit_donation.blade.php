@@ -153,6 +153,7 @@
                        <option value="Cash" {{$edit_donation->amount_type == "Cash"  ? 'selected' : ''}}>Cash</option>
                         <option value="Cheque" {{$edit_donation->amount_type == "Cheque"  ? 'selected' : ''}}>Cheque</option>
                         <option value="Pay Order" {{$edit_donation->amount_type == "Pay Order"  ? 'selected' : ''}}>Pay Order</option>
+                        <option value="Online Deposited" {{$edit_donation->amount_type == "Online Deposited"  ? 'selected' : ''}}>Online Deposited</option>
                        </select>
                     </div>
                     <div class="col-xs-6">
@@ -160,7 +161,7 @@
                       <select class="form-control payment_type" name="payment_type" id="donation_type" required=""> 
                        <option value="Received" {{$edit_donation->payment_type == "Received"  ? 'selected' : ''}}>Received</option>
                         <option value="To be Collected" {{$edit_donation->payment_type == "To be Collected"  ? 'selected' : ''}}>To be Collected</option>
-                        <option value="Online Deposited" {{$edit_donation->payment_type == "Online Deposited"  ? 'selected' : ''}}>Online Deposited</option>
+                        
                        </select>
                     </div>
                      
