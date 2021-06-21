@@ -154,14 +154,14 @@
                        <option value="Cash">Cash</option>
                         <option value="Cheque">Cheque</option>
                         <option value="Pay Order">Pay Order</option>
+                        <option value="Online Deposited">Online Deposited</option>
                        </select>
                     </div>
                     <div class="col-xs-6">
                       <label for="address">Payment Type</label>
                       <select class="form-control payment_type" name="payment_type" id="payment_type" required=""> 
                        <option value="Received">Received</option>
-                        <option value="To be Collected">To be Collected</option>
-                        <option value="Online Deposited">Online Deposited</option>
+                        <option value="To be Collected">To be Collected</option> 
                        </select>
                     </div>
                      
@@ -407,6 +407,10 @@ $(".amount_type").change(function() {
     $(".draft_no").removeAttr("disabled");
     $(".draft_date").removeAttr("disabled");
     $(".drawn_on").removeAttr("disabled");
+  } else if ($(this).val() == 'Online Deposited'){
+    $(".draft_no").removeAttr("disabled");
+    $(".draft_date").removeAttr("disabled");
+    $(".drawn_on").removeAttr("disabled");
   } 
   else {
     $(".draft_no").removeAttr("disabled");
@@ -418,12 +422,7 @@ $(".amount_type").change(function() {
 <script>
 $(".payment_type").change(function() {
     var conceptName = $('.amount_type').find(":selected").text();
-  if($(this).val() == 'Online Deposited' && conceptName == 'Cash'){
-    console.log(conceptName);
-    $(".draft_no").removeAttr("disabled");
-    $(".draft_date").removeAttr("disabled");
-    $(".drawn_on").removeAttr("disabled");
-  } else if ($(this).val() == 'Pay Order' && conceptName == 'Cheque'){
+   if ($(this).val() == 'Pay Order' && conceptName == 'Cheque'){
     console.log(conceptName);
     $(".draft_no").attr("disabled", "disabled");
     $(".draft_no").val('');
